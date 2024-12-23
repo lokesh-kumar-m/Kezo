@@ -1,5 +1,7 @@
 package com.app.Kezos.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -12,9 +14,10 @@ public class Assignments {
     @GeneratedValue
     private int id;
     private String name;
-
+    private String deadLine;
+    private int points;
     @ManyToOne
-    @JoinColumn(name = "course_id")
+    @JsonBackReference
     private CourseEntity course;
 
     public int getId() {
@@ -27,6 +30,22 @@ public class Assignments {
 
     public void setName(String name) {
         this.name = name;
+    }
+    public String getDeadLine() {
+        return deadLine;
+    }
+
+    public void setDeadLine(String date) {
+        this.deadLine = date;
+    }
+
+        
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
     }
 
     public CourseEntity getCourse() {

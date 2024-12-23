@@ -1,7 +1,6 @@
 package com.app.Kezos.model;
 import java.util.List;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -17,11 +16,10 @@ public class StudentEntity {
 
     private String firstName;
     private String lastName;
-    @Column(unique = true, nullable = false)
-    private String email;
+    private String studentMail;
     private String studentId; 
     private String phoneNumber;
-    private int year; 
+    private int rank; 
     @ManyToMany
     @JoinTable(
         name = "student_courses",
@@ -45,11 +43,11 @@ public class StudentEntity {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    public String getEmail() {
-        return email;
+    public String getStudentMail() {
+        return studentMail;
     }
-    public void setEmail(String email) {
-        this.email = email;
+    public void setStudentMail(String email) {
+        this.studentMail = email;
     }
     public String getStudentId() {
         return studentId;
@@ -63,11 +61,11 @@ public class StudentEntity {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-    public int getYear() {
-        return year;
+    public int getRank() {
+        return rank;
     }
-    public void setYear(int year) {
-        this.year = year;
+    public void setRank(int year) {
+        this.rank = year;
     }
     public List<CourseEntity> getCourses() {
         return courses;

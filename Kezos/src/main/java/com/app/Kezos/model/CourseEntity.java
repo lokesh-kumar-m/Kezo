@@ -1,6 +1,9 @@
 package com.app.Kezos.model;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,13 +17,12 @@ public class CourseEntity {
     @GeneratedValue
     private int id;
     private String courseName;
+    private String courseId;
     private int credits;
     private String instructor;
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Assignments> assignments;
-
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<DeadLine> deadlines;
 
     @ManyToMany(mappedBy = "courses")
     private List<StudentEntity> students;
@@ -35,6 +37,14 @@ public class CourseEntity {
 
     public void setCourseName(String courseName) {
         this.courseName = courseName;
+    }
+
+    public String getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(String courseId) {
+        this.courseId = courseId;
     }
 
     public int getCredits() {
@@ -59,14 +69,6 @@ public class CourseEntity {
 
     public void setAssignments(List<Assignments> assignments) {
         this.assignments = assignments;
-    }
-
-    public List<DeadLine> getDeadlines() {
-        return deadlines;
-    }
-
-    public void setDeadlines(List<DeadLine> deadlines) {
-        this.deadlines = deadlines;
     }
 
     public List<StudentEntity> getStudents() {
