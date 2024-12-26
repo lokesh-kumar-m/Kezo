@@ -3,7 +3,9 @@ package com.app.Kezos.Dto;
 public class AssignmentDto {
     private String title;
     private int points;
+    private String description;
     private String deadline;
+
     public String getTitle() {
         return title;
     }
@@ -21,5 +23,11 @@ public class AssignmentDto {
     }
     public void setDeadline(String deadline) {
         this.deadline = deadline;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

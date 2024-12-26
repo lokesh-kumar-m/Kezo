@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
@@ -14,6 +13,7 @@ public class Assignments {
     @GeneratedValue
     private int id;
     private String name;
+    private String description;
     private String deadLine;
     private int points;
     @ManyToOne
@@ -54,5 +54,12 @@ public class Assignments {
 
     public void setCourse(CourseEntity course) {
         this.course = course;
+    }
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
