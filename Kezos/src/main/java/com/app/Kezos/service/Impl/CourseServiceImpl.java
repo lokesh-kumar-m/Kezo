@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,8 @@ import com.app.Kezos.repository.AssignmentRepository;
 import com.app.Kezos.repository.CourseRepository;
 import com.app.Kezos.service.CourseService;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CourseServiceImpl implements CourseService {
     @Autowired
@@ -23,8 +26,11 @@ public class CourseServiceImpl implements CourseService {
     private AssignmentRepository assignmentRepository;
 
     @Override
+    @Transactional
     public List<CourseEntity> fetchAllCourses() {
-        return courseRepository.findAll();
+        List<CourseEntity> courses=courseRepository.findAll();
+        courses.forEach(course -> Hibernate.initialize(course.getAssignments()));
+        return courses;
     }
 
     @Override

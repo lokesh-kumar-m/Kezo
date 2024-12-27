@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 
 import com.app.Kezos.Dto.AssignmentDto;
 import com.app.Kezos.Dto.CourseDto;
@@ -14,6 +16,9 @@ import com.app.Kezos.model.CourseEntity;
 import com.app.Kezos.service.CourseService;
 import com.app.Kezos.service.Impl.CourseServiceImpl;
 
+import jakarta.transaction.Transactional;
+
+@Configuration
 public class ProxyCourseService implements CourseService{
 
     @Autowired
@@ -65,22 +70,16 @@ public class ProxyCourseService implements CourseService{
     }
 
     @Override
+    @Transactional
     public String createAssignment(String courseId, List<AssignmentDto> assignmentsDtos) {
         String result="";
         Predicate<? super CourseEntity> predicate=course->course.getCourseId().equalsIgnoreCase(courseId);
         CourseEntity course=allCourses.stream().filter(predicate).findFirst().orElse(null);
         if(course!=null){
-            List<Assignments> assignmentsList = assignmentsDtos.stream().map(assignmentDto -> {
-                Assignments assignment = new Assignments();
-                assignment.setName(assignmentDto.getTitle());
-                assignment.setPoints(assignmentDto.getPoints());
-                assignment.setDescription(assignmentDto.getDescription());
-                assignment.setDeadLine(assignmentDto.getDeadline());
-                assignment.setCourse(course);
-                return assignment;
-            }).collect(Collectors.toList());
-            course.getAssignments().addAll(assignmentsList);
             result=courseServiceImpl.createAssignment(courseId, assignmentsDtos);
+            allCourses=courseServiceImpl.fetchAllCourses();
+            allCourses.forEach(c -> {Hibernate.initialize(c.getAssignments());
+                Hibernate.initialize(c.getStudents());});
         }else{
             result="Error!\nCourse does not exist";
         }

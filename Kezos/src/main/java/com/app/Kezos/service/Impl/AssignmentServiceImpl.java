@@ -1,11 +1,13 @@
 package com.app.Kezos.service.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.app.Kezos.Dto.AssignmentDto;
 import com.app.Kezos.repository.AssignmentRepository;
 import com.app.Kezos.service.AssignmentService;
 
+@Service
 public class AssignmentServiceImpl  implements AssignmentService{
     @Autowired
     private AssignmentRepository assignmentRepository;
