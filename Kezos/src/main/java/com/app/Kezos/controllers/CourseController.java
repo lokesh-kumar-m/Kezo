@@ -16,26 +16,26 @@ import com.app.Kezos.Dto.AssignmentDto;
 import com.app.Kezos.Dto.CourseDto;
 import com.app.Kezos.model.Assignments;
 import com.app.Kezos.model.CourseEntity;
-import com.app.Kezos.service.Impl.CourseServiceImpl;
+import com.app.Kezos.service.proxy.ProxyCourseService;
 
 @RestController
 public class CourseController {
 
     @Autowired
-    private CourseServiceImpl courseService;
+    private ProxyCourseService proxyService;
     
     @GetMapping("kezo/v1/courses")
     public ResponseEntity<List<CourseEntity>> getMyCourses(){
-        return new ResponseEntity<List<CourseEntity>>(courseService.fetchAllCourses(),HttpStatus.OK);
+        return new ResponseEntity<List<CourseEntity>>(proxyService.fetchAllCourses(),HttpStatus.OK);
     }
     @GetMapping("kezo/v1/courses/{courseId}")
     public ResponseEntity<CourseEntity> fetchCourse(@PathVariable("courseId")String courseId){
-        return new ResponseEntity<CourseEntity>(courseService.fetchCourse(courseId),HttpStatus.OK);
+        return new ResponseEntity<CourseEntity>(proxyService.fetchCourse(courseId),HttpStatus.OK);
     }
 
     @PostMapping("kezo/v1/courses/add")
     public ResponseEntity<String> newCourse(@RequestBody CourseDto course){
-        return new ResponseEntity<>(courseService.createCourse(course),HttpStatus.OK);
+        return new ResponseEntity<>(proxyService.createCourse(course),HttpStatus.OK);
     }
     @DeleteMapping("kezo/v1/courses/{courseId}")
     public ResponseEntity<String> removeCourse(@PathVariable("courseId") String courseId){
@@ -44,12 +44,12 @@ public class CourseController {
 
     @GetMapping("kezo/v1/courses/{courseId}/assignments")
     public ResponseEntity<List<Assignments>> courseAssignments(@PathVariable("courseId")String courseId ){
-        return new ResponseEntity<>(courseService.fetchCourseAssignments(courseId),HttpStatus.OK);
+        return new ResponseEntity<>(proxyService.fetchCourseAssignments(courseId),HttpStatus.OK);
     }
 
     @PostMapping("kezo/v1/courses/{courseId}/assignments")
     public ResponseEntity<String> newAssignment(@PathVariable("courseId") String courseId, @RequestBody List<AssignmentDto> assignmentDto ){
-        String result=courseService.createAssignment(courseId, assignmentDto);
+        String result=proxyService.createAssignment(courseId, assignmentDto);
         HttpStatus returnStatus= result.contains("Error")?HttpStatus.BAD_REQUEST:HttpStatus.OK;
         return new ResponseEntity<>( result, returnStatus);
     }
