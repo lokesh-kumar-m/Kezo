@@ -14,7 +14,7 @@ import com.app.Kezos.model.StudentEntity;
 import com.app.Kezos.repository.StudentRepository;
 import com.app.Kezos.service.IStudentService;
 import com.app.Kezos.service.helper.IEvaluator;
-import com.app.Kezos.service.proxy.ProxyCourseService;
+import com.app.Kezos.service.helper.TimeValidator;
 
 @Service
 public class StudentServiceImpl implements IStudentService{
@@ -22,8 +22,11 @@ public class StudentServiceImpl implements IStudentService{
     private StudentRepository studentRepository;
     @Autowired
     private AssignmentServiceImpl assignmentService;
-    @Autowired
     private IEvaluator evaluator;
+
+    public StudentServiceImpl(){
+        evaluator=new TimeValidator();
+    }
 
     @Override
     public List<StudentEntity> fetchAllStudents() {
