@@ -25,7 +25,7 @@ public class CourseController {
     private ProxyCourseService proxyService;
     
     @GetMapping("kezo/v1/courses")
-    public ResponseEntity<List<CourseEntity>> getMyCourses(){
+    public ResponseEntity<List<CourseEntity>> getallCourses(){
         return new ResponseEntity<List<CourseEntity>>(proxyService.fetchAllCourses(),HttpStatus.OK);
     }
     @GetMapping("kezo/v1/courses/{courseId}")

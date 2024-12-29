@@ -7,7 +7,7 @@ import com.app.Kezos.Dto.CourseDto;
 import com.app.Kezos.model.Assignments;
 import com.app.Kezos.model.CourseEntity;
 
-public interface CourseService {
+public interface ICourseService {
     List<CourseEntity> fetchAllCourses();
     CourseEntity fetchCourse(String courseId);
     String createCourse(CourseDto courseDto);

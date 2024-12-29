@@ -13,13 +13,12 @@ public class StudentEntity {
     @Id
     @GeneratedValue
     private int id;
-
     private String firstName;
     private String lastName;
     private String studentMail;
     private String studentId; 
     private String phoneNumber;
-    private int rank; 
+    private int score; 
     @ManyToMany
     @JoinTable(
         name = "student_courses",
@@ -61,11 +60,11 @@ public class StudentEntity {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-    public int getRank() {
-        return rank;
+    public int getScore() {
+        return score;
     }
-    public void setRank(int year) {
-        this.rank = year;
+    public void setScore(int year) {
+        this.score = year;
     }
     public List<CourseEntity> getCourses() {
         return courses;

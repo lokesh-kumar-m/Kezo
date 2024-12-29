@@ -14,12 +14,12 @@ import com.app.Kezos.model.Assignments;
 import com.app.Kezos.model.CourseEntity;
 import com.app.Kezos.repository.AssignmentRepository;
 import com.app.Kezos.repository.CourseRepository;
-import com.app.Kezos.service.CourseService;
+import com.app.Kezos.service.ICourseService;
 
 import jakarta.transaction.Transactional;
 
 @Service
-public class CourseServiceImpl implements CourseService {
+public class CourseServiceImpl implements ICourseService {
     @Autowired
     private CourseRepository courseRepository;
     @Autowired

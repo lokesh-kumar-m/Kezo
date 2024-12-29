@@ -13,13 +13,13 @@ import com.app.Kezos.Dto.AssignmentDto;
 import com.app.Kezos.Dto.CourseDto;
 import com.app.Kezos.model.Assignments;
 import com.app.Kezos.model.CourseEntity;
-import com.app.Kezos.service.CourseService;
+import com.app.Kezos.service.ICourseService;
 import com.app.Kezos.service.Impl.CourseServiceImpl;
 
 import jakarta.transaction.Transactional;
 
 @Configuration
-public class ProxyCourseService implements CourseService{
+public class ProxyCourseService implements ICourseService{
 
     @Autowired
     private CourseServiceImpl courseServiceImpl;

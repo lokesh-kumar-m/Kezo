@@ -4,11 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.Kezos.Dto.AssignmentDto;
+import com.app.Kezos.model.Assignments;
 import com.app.Kezos.repository.AssignmentRepository;
-import com.app.Kezos.service.AssignmentService;
+import com.app.Kezos.service.IAssignmentService;
 
 @Service
-public class AssignmentServiceImpl  implements AssignmentService{
+public class AssignmentServiceImpl  implements IAssignmentService{
     @Autowired
     private AssignmentRepository assignmentRepository;
 
@@ -38,4 +39,7 @@ public class AssignmentServiceImpl  implements AssignmentService{
         return result;
     }
     
+    public Assignments fetchAssignments(int aId){
+        return assignmentRepository.findById(aId).get();
+    }
 }
