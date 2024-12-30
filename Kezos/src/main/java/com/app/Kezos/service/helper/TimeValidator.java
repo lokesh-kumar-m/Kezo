@@ -3,6 +3,9 @@ package com.app.Kezos.service.helper;
 import java.time.LocalDate;
 import java.util.HashMap;
 
+import org.springframework.stereotype.Component;
+
+@Component("timeValidator")
 public class TimeValidator implements IEvaluator{
 
     @Override

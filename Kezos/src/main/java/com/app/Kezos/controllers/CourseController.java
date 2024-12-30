@@ -28,6 +28,7 @@ public class CourseController {
     public ResponseEntity<List<CourseEntity>> getallCourses(){
         return new ResponseEntity<List<CourseEntity>>(proxyService.fetchAllCourses(),HttpStatus.OK);
     }
+
     @GetMapping("kezo/v1/courses/{courseId}")
     public ResponseEntity<CourseEntity> fetchCourse(@PathVariable("courseId")String courseId){
         return new ResponseEntity<CourseEntity>(proxyService.fetchCourse(courseId),HttpStatus.OK);
@@ -37,9 +38,12 @@ public class CourseController {
     public ResponseEntity<String> newCourse(@RequestBody CourseDto course){
         return new ResponseEntity<>(proxyService.createCourse(course),HttpStatus.OK);
     }
+    
     @DeleteMapping("kezo/v1/courses/{courseId}")
     public ResponseEntity<String> removeCourse(@PathVariable("courseId") String courseId){
-        return new ResponseEntity<>("",HttpStatus.OK);
+        String result=proxyService.removeCourse(courseId);
+        HttpStatus status=result.contains("Error")?HttpStatus.BAD_REQUEST:HttpStatus.OK;
+        return new ResponseEntity<>(result,status);
     }
 
     @GetMapping("kezo/v1/courses/{courseId}/assignments")

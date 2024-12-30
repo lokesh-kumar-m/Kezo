@@ -2,6 +2,9 @@ package com.app.Kezos.service.helper;
 
 import java.util.HashMap;
 
+import org.springframework.stereotype.Component;
+
+@Component("answerValidator")
 public class AnswerValidator implements IEvaluator{
 
     @Override

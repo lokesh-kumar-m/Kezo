@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.app.Kezos.model.Assignments;
@@ -14,7 +15,6 @@ import com.app.Kezos.model.StudentEntity;
 import com.app.Kezos.repository.StudentRepository;
 import com.app.Kezos.service.IStudentService;
 import com.app.Kezos.service.helper.IEvaluator;
-import com.app.Kezos.service.helper.TimeValidator;
 
 @Service
 public class StudentServiceImpl implements IStudentService{
@@ -22,11 +22,9 @@ public class StudentServiceImpl implements IStudentService{
     private StudentRepository studentRepository;
     @Autowired
     private AssignmentServiceImpl assignmentService;
-    private IEvaluator evaluator;
+    @Qualifier("answerValidator")
+    private IEvaluator tEvaluator;
 
-    public StudentServiceImpl(){
-        evaluator=new TimeValidator();
-    }
 
     @Override
     public List<StudentEntity> fetchAllStudents() {
@@ -61,12 +59,12 @@ public class StudentServiceImpl implements IStudentService{
         courseInfo.put("date", assignment.getDeadLine());
         studentInfo.put("answer", submission);
         String result="";
-        if(evaluator.validateAnswer(studentInfo, courseInfo)){
+        if(tEvaluator.validateAnswer(studentInfo, courseInfo)){
             result="Assignment submitted successfully";
             student.setScore(10);
         }else{
             result="Error\nAssignment Expired";
-            student.setScore(aId);
+            student.setScore(0);
         }
         return result;
     }

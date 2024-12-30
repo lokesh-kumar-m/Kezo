@@ -63,6 +63,7 @@ public class CourseServiceImpl implements ICourseService {
     }
 
     @Override
+    @Transactional
     public String removeCourse(String courseId) {
         String result="";
         if(courseRepository.existsByCourseId(courseId)){
@@ -95,7 +96,7 @@ public class CourseServiceImpl implements ICourseService {
             result="Assignments added successfully!";
         }
         else{
-            result="Error! Course with the Id: "+ courseId+" not found\nCreate course before accessing it!";
+            result="Error!\nCourse with the Id: "+ courseId+" not found\nCreate course before accessing it!";
         }
         return result;
     }
