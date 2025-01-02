@@ -2,6 +2,8 @@ package com.app.Kezos.controllers;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,11 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.app.Kezos.Dto.AssignmentDto;
 import com.app.Kezos.Dto.CourseDto;
-import com.app.Kezos.model.Assignments;
 import com.app.Kezos.model.CourseEntity;
 import com.app.Kezos.service.proxy.ProxyCourseService;
 
@@ -23,38 +24,31 @@ public class CourseController {
 
     @Autowired
     private ProxyCourseService proxyService;
-    
-    @GetMapping("kezo/v1/courses")
-    public ResponseEntity<List<CourseEntity>> getallCourses(){
-        return new ResponseEntity<List<CourseEntity>>(proxyService.fetchAllCourses(),HttpStatus.OK);
+    // private Logger logger=LoggerFactory.getLogger(getClass());
+    private final String endpoint="kezo/v1/courses";
+
+    @GetMapping(endpoint)
+    public ResponseEntity<?> fetchCourse(@RequestParam(value="id",required=false) String courseId){
+        ResponseEntity<?> response;
+        List<CourseEntity> courses=proxyService.fetchOneOrAll(courseId);
+        response=new ResponseEntity<>(courses,HttpStatus.OK);
+        return response;
     }
 
-    @GetMapping("kezo/v1/courses/{courseId}")
-    public ResponseEntity<CourseEntity> fetchCourse(@PathVariable("courseId")String courseId){
-        return new ResponseEntity<CourseEntity>(proxyService.fetchCourse(courseId),HttpStatus.OK);
-    }
-
-    @PostMapping("kezo/v1/courses/add")
+    @PostMapping(endpoint)
     public ResponseEntity<String> newCourse(@RequestBody CourseDto course){
         return new ResponseEntity<>(proxyService.createCourse(course),HttpStatus.OK);
     }
     
-    @DeleteMapping("kezo/v1/courses/{courseId}")
+    @DeleteMapping(endpoint+"/{courseId}")
     public ResponseEntity<String> removeCourse(@PathVariable("courseId") String courseId){
         String result=proxyService.removeCourse(courseId);
         HttpStatus status=result.contains("Error")?HttpStatus.BAD_REQUEST:HttpStatus.OK;
         return new ResponseEntity<>(result,status);
     }
 
-    @GetMapping("kezo/v1/courses/{courseId}/assignments")
-    public ResponseEntity<List<Assignments>> courseAssignments(@PathVariable("courseId")String courseId ){
-        return new ResponseEntity<>(proxyService.fetchCourseAssignments(courseId),HttpStatus.OK);
-    }
-
-    @PostMapping("kezo/v1/courses/{courseId}/assignments")
-    public ResponseEntity<String> newAssignment(@PathVariable("courseId") String courseId, @RequestBody List<AssignmentDto> assignmentDto ){
-        String result=proxyService.createAssignment(courseId, assignmentDto);
-        HttpStatus returnStatus= result.contains("Error")?HttpStatus.BAD_REQUEST:HttpStatus.OK;
-        return new ResponseEntity<>( result, returnStatus);
-    }
+    // @GetMapping("kezo/v1/courses/test/{courseId}")
+    // public ResponseEntity<?> testingCourse(@PathVariable("courseId")String courseId){
+    //     return new ResponseEntity<>(proxyService.courseTest(courseId),HttpStatus.OK);
+    // }
 }

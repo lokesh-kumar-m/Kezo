@@ -33,7 +33,7 @@ public class StudentServiceImpl implements IStudentService{
 
     @Override
     public List<CourseEntity> fetchMyCourses(String studentId) {
-        StudentEntity student = studentRepository.findByStudentId(studentId);
+        StudentEntity student = studentRepository.findByEnrollmentNumber(studentId);
         if (student != null) {
             return student.getCourses();
         }
@@ -44,12 +44,12 @@ public class StudentServiceImpl implements IStudentService{
 
     @Override
     public StudentEntity studentDetails(String studentId) {
-        return studentRepository.findByStudentId(studentId);
+        return studentRepository.findByEnrollmentNumber(studentId);
     }
 
     @Override
     public String submitAssignment(String studentId, int aId, String submission) {
-        StudentEntity student = studentRepository.findByStudentId(studentId);
+        StudentEntity student = studentRepository.findByEnrollmentNumber(studentId);
         Assignments assignment=assignmentService.fetchAssignments(aId);
         HashMap<String,String> courseInfo=new HashMap<>();
         HashMap<String,String> studentInfo=new HashMap<>();
@@ -71,7 +71,7 @@ public class StudentServiceImpl implements IStudentService{
 
     @Override
     public String fetchStudentScore(String studentId) {
-        StudentEntity student = studentRepository.findByStudentId(studentId);
+        StudentEntity student = studentRepository.findByEnrollmentNumber(studentId);
         if (student==null) {
             return "Error\nNo submissions found for the student.";
         }

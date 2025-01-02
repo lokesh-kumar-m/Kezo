@@ -15,9 +15,9 @@ public class StudentEntity {
     private int id;
     private String firstName;
     private String lastName;
-    private String studentMail;
-    private String studentId; 
-    private String phoneNumber;
+    private String eMail;
+    private String enrollmentNumber; 
+    private String contactNumber;
     private int score; 
     @ManyToMany
     @JoinTable(
@@ -42,23 +42,23 @@ public class StudentEntity {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    public String getStudentMail() {
-        return studentMail;
+    public String geteMail() {
+        return eMail;
     }
-    public void setStudentMail(String email) {
-        this.studentMail = email;
+    public void seteMail(String email) {
+        this.eMail = email;
     }
-    public String getStudentId() {
-        return studentId;
+    public String getEnrollmentNumber() {
+        return enrollmentNumber;
     }
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    public void setEnrollmentNumber(String studentId) {
+        this.enrollmentNumber = studentId;
     }
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getContactNumber() {
+        return contactNumber;
     }
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setContactNumber(String phoneNumber) {
+        this.contactNumber = phoneNumber;
     }
     public int getScore() {
         return score;

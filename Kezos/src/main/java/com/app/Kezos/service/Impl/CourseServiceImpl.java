@@ -66,7 +66,7 @@ public class CourseServiceImpl implements ICourseService {
     @Transactional
     public String removeCourse(String courseId) {
         String result="";
-        if(courseRepository.existsByCourseId(courseId)){
+        if(existingCourse(courseId)){
             courseRepository.deleteByCourseId(courseId);
             result="Course removed sucessfully!";
         }else{
@@ -76,38 +76,8 @@ public class CourseServiceImpl implements ICourseService {
     }
 
     @Override
-    public String createAssignment(String courseId, List<AssignmentDto> assignmentsDtos) {
-        String result="";
-        if(courseRepository.existsByCourseId(courseId)){
-            CourseEntity courseEntity = courseRepository.findByCourseId(courseId);
-            List<Assignments> assignmentsList = assignmentsDtos.stream().map(assignmentDto -> {
-                Assignments assignment = new Assignments();
-                assignment.setName(assignmentDto.getTitle());
-                assignment.setPoints(assignmentDto.getPoints());
-                assignment.setDescription(assignmentDto.getDescription());
-                assignment.setDeadLine(assignmentDto.getDeadline());
-                assignment.setCourse(courseEntity);
-                return assignment;
-            }).collect(Collectors.toList());
-    
-            assignmentRepository.saveAll(assignmentsList);
-            courseEntity.getAssignments().addAll(assignmentsList);
-            courseRepository.save(courseEntity);
-            result="Assignments added successfully!";
-        }
-        else{
-            result="Error!\nCourse with the Id: "+ courseId+" not found\nCreate course before accessing it!";
-        }
-        return result;
-    }
-
-    public List<Assignments> fetchCourseAssignments(String courseId){
-        List<Assignments> assignments=new ArrayList<>();
-        if(courseRepository.existsByCourseId(courseId)){
-            CourseEntity course=fetchCourse(courseId);
-            assignments=course.getAssignments();
-        }
-        return assignments;
+    public boolean existingCourse(String id) {
+        return courseRepository.existsByCourseId(id);
     }
 
 }

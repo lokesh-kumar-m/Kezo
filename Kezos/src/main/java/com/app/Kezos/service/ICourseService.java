@@ -8,10 +8,11 @@ import com.app.Kezos.model.Assignments;
 import com.app.Kezos.model.CourseEntity;
 
 public interface ICourseService {
+    boolean existingCourse(String id);
     List<CourseEntity> fetchAllCourses();
     CourseEntity fetchCourse(String courseId);
     String createCourse(CourseDto courseDto);
     String removeCourse(String courseId);
-    String createAssignment(String courseId, List<AssignmentDto> assignmentsDtos);
-    List<Assignments> fetchCourseAssignments(String courseId);
+    // String createAssignment(String courseId, List<AssignmentDto> assignmentsDtos);
+    // List<Assignments> fetchCourseAssignments(String courseId);
 }
