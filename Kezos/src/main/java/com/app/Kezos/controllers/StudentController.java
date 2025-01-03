@@ -18,13 +18,14 @@ import com.app.Kezos.service.Impl.StudentServiceImpl;
 public class StudentController {
     @Autowired
     private StudentServiceImpl studentService;
+    private final String endpointV1="/v1/students";
 
-    @GetMapping("kezo/v1/students")
-    public ResponseEntity<?> getStudentInfo(@RequestParam(value="sId",required=false)String sId){
-        return new ResponseEntity<>(studentService.fetchAllStudents(),HttpStatus.OK);
+    @GetMapping(endpointV1)
+    public ResponseEntity<List<StudentEntity>> getAllStudents(@RequestParam(value="sId",required = false)String sId){
+        return new ResponseEntity<>(studentService.,HttpStatus.OK);
     }
 
-    @GetMapping("kezo/v1/students/{studentId}")
+    @GetMapping(endpointV1+"/{studentId}")
     public ResponseEntity<StudentEntity> getCurrentStudent(@PathVariable("studentId") String studentId){
         return new ResponseEntity<>(studentService.fetchStudentDetails(studentId),HttpStatus.OK);
     }

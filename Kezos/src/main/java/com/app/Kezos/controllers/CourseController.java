@@ -25,9 +25,9 @@ public class CourseController {
     @Autowired
     private ProxyCourseService proxyService;
     // private Logger logger=LoggerFactory.getLogger(getClass());
-    private final String endpoint="kezo/v1/courses";
+    private final String endpointV1="/v1/courses";
 
-    @GetMapping(endpoint)
+    @GetMapping(endpointV1)
     public ResponseEntity<?> fetchCourse(@RequestParam(value="id",required=false) String courseId){
         ResponseEntity<?> response;
         List<CourseEntity> courses=proxyService.fetchOneOrAll(courseId);
@@ -35,12 +35,12 @@ public class CourseController {
         return response;
     }
 
-    @PostMapping(endpoint)
+    @PostMapping(endpointV1)
     public ResponseEntity<String> newCourse(@RequestBody CourseDto course){
         return new ResponseEntity<>(proxyService.createCourse(course),HttpStatus.OK);
     }
     
-    @DeleteMapping(endpoint+"/{courseId}")
+    @DeleteMapping(endpointV1+"/{courseId}")
     public ResponseEntity<String> removeCourse(@PathVariable("courseId") String courseId){
         String result=proxyService.removeCourse(courseId);
         HttpStatus status=result.contains("Error")?HttpStatus.BAD_REQUEST:HttpStatus.OK;
