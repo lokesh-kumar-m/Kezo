@@ -22,22 +22,22 @@ import com.app.Kezos.service.Impl.AssignmentServiceImpl;
 public class AssignmentController {
     @Autowired
     private AssignmentServiceImpl assignmentService;
-    private final String endpoint="";
+    private final String endpoint="kezo/v1/assignments";
 
-    @GetMapping("kezo/v1/assignments")
+    @GetMapping(endpoint)
     public ResponseEntity<List<Assignments>> courseAssignments(@RequestParam(value="courseId",required=false)String courseId ){
         return new ResponseEntity<>(assignmentService.fetchCourseAssignments(courseId),HttpStatus.OK);
     
     }
 
-    @DeleteMapping("kezo/v1/assignments/{aId}")
+    @DeleteMapping(endpoint+"/{aId}")
     public ResponseEntity<String> dropAssignemnt(@PathVariable("aId") int id){
         String responseString=assignmentService.removeAssignment(id);
         HttpStatus status=responseString.contains("Error")?HttpStatus.BAD_REQUEST:HttpStatus.OK;
         return new ResponseEntity<>(responseString,status);
     }
 
-    @PutMapping("kezo/v1/assignments/{aId}")
+    @PutMapping(endpoint+"/{aId}")
     public ResponseEntity<String> updateDeadline(@RequestBody AssignmentDto updatedDto){
         String responseString=assignmentService.updateDeadLine(updatedDto, 0);
         HttpStatus status=responseString.contains("Error")?HttpStatus.BAD_REQUEST:HttpStatus.OK;
@@ -45,7 +45,7 @@ public class AssignmentController {
     }
 
 
-    @PostMapping("kezo/v1/assignments")
+    @PostMapping(endpoint)
     public ResponseEntity<String> newAssignment(@RequestParam(value="courseId",required = false) String courseId, @RequestBody List<AssignmentDto> assignmentDto ){
         String result=assignmentService.createAssignment(courseId, assignmentDto);
         HttpStatus returnStatus= result.contains("Error")?HttpStatus.BAD_REQUEST:HttpStatus.OK;

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.Kezos.model.StudentEntity;
@@ -19,13 +20,13 @@ public class StudentController {
     private StudentServiceImpl studentService;
 
     @GetMapping("kezo/v1/students")
-    public ResponseEntity<List<StudentEntity>> getAllStudents(){
+    public ResponseEntity<?> getStudentInfo(@RequestParam(value="sId",required=false)String sId){
         return new ResponseEntity<>(studentService.fetchAllStudents(),HttpStatus.OK);
     }
 
     @GetMapping("kezo/v1/students/{studentId}")
     public ResponseEntity<StudentEntity> getCurrentStudent(@PathVariable("studentId") String studentId){
-        return new ResponseEntity<>(studentService.studentDetails(studentId),HttpStatus.OK);
+        return new ResponseEntity<>(studentService.fetchStudentDetails(studentId),HttpStatus.OK);
     }
 
     // @GetMapping("kezo/v1/student/")

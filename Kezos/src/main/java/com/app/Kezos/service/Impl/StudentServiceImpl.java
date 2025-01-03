@@ -1,6 +1,7 @@
 package com.app.Kezos.service.Impl;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,7 @@ import com.app.Kezos.model.StudentEntity;
 import com.app.Kezos.repository.StudentRepository;
 import com.app.Kezos.service.IStudentService;
 import com.app.Kezos.service.helper.IEvaluator;
+import com.app.Kezos.service.proxy.ProxyCourseService;
 
 @Service
 public class StudentServiceImpl implements IStudentService{
@@ -22,9 +24,20 @@ public class StudentServiceImpl implements IStudentService{
     private StudentRepository studentRepository;
     @Autowired
     private AssignmentServiceImpl assignmentService;
+    @Autowired
+    private ProxyCourseService proxyService;
     @Qualifier("answerValidator")
     private IEvaluator tEvaluator;
 
+    public List<StudentEntity> fetchOneOrMany(String sId){
+        List<StudentEntity> students=new ArrayList<>();
+        if(sId==null){
+            students=fetchAllStudents();
+        }else{
+            students.add(fetchStudentDetails(sId));
+        }
+        return students;
+    }
 
     @Override
     public List<StudentEntity> fetchAllStudents() {
@@ -43,7 +56,7 @@ public class StudentServiceImpl implements IStudentService{
     }
 
     @Override
-    public StudentEntity studentDetails(String studentId) {
+    public StudentEntity fetchStudentDetails(String studentId) {
         return studentRepository.findByEnrollmentNumber(studentId);
     }
 
@@ -76,6 +89,10 @@ public class StudentServiceImpl implements IStudentService{
             return "Error\nNo submissions found for the student.";
         }
         return student.getScore()+"";
+    }
+    public String registerCourse(String courseId){
+        CourseEntity course=proxyService.fetchCourse(courseId);
+        course.getStudents().add(null);
     }
     
 }
