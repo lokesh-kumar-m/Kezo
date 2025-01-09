@@ -8,11 +8,9 @@ import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.app.Kezos.Dto.AssignmentDto;
 import com.app.Kezos.Dto.CourseDto;
 import com.app.Kezos.model.Assignments;
 import com.app.Kezos.model.CourseEntity;
-import com.app.Kezos.repository.AssignmentRepository;
 import com.app.Kezos.repository.CourseRepository;
 import com.app.Kezos.service.ICourseService;
 
@@ -22,8 +20,7 @@ import jakarta.transaction.Transactional;
 public class CourseServiceImpl implements ICourseService {
     @Autowired
     private CourseRepository courseRepository;
-    @Autowired
-    private AssignmentRepository assignmentRepository;
+
 
     @Override
     @Transactional
@@ -80,4 +77,7 @@ public class CourseServiceImpl implements ICourseService {
         return courseRepository.existsByCourseId(id);
     }
 
+    public void checkpoint(CourseEntity course){
+        courseRepository.save(course);
+    }
 }

@@ -85,4 +85,8 @@ public class ProxyCourseService implements ICourseService{
         return allCourses.stream().filter(predicate).findFirst().orElse(null);
     }
     
+    public void checkpoint(CourseEntity course){
+        courseServiceImpl.checkpoint(course);
+    }
+    
 }

@@ -2,6 +2,7 @@ package com.app.Kezos.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -25,6 +26,7 @@ public class CourseEntity {
     private List<Assignments> assignments;
 
     @ManyToMany(mappedBy = "courses")
+    @JsonBackReference
     private List<StudentEntity> students;
 
     public int getId() {

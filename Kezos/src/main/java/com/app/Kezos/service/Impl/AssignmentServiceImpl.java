@@ -77,9 +77,13 @@ public class AssignmentServiceImpl  implements IAssignmentService{
 
     public List<Assignments> fetchCourseAssignments(String courseId){
         List<Assignments> assignments=new ArrayList<>();
-        if(proxyCourseService.existingCourse(courseId)){
-            CourseEntity course=proxyCourseService.fetchCourse(courseId);
-            assignments=course.getAssignments();
+        if(courseId==null){
+            assignments=assignmentRepository.findAll();
+        }else{
+            if(proxyCourseService.existingCourse(courseId)){
+                CourseEntity course=proxyCourseService.fetchCourse(courseId);
+                assignments=course.getAssignments();
+            }
         }
         return assignments;
     }

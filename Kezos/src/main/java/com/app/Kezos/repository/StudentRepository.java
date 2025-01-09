@@ -6,4 +6,5 @@ import com.app.Kezos.model.StudentEntity;
 
 public interface StudentRepository extends JpaRepository<StudentEntity,Integer>{
     StudentEntity findByEnrollmentNumber(String id);
+    boolean existsByEnrollmentNumber(String id);
 }

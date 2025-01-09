@@ -1,6 +1,9 @@
 package com.app.Kezos.model;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -25,6 +28,7 @@ public class StudentEntity {
         joinColumns = @JoinColumn(name = "student_id"),
         inverseJoinColumns = @JoinColumn(name = "course_id")
     )
+    @JsonManagedReference
     private List<CourseEntity> courses;
     
     public int getId() {

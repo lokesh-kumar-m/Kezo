@@ -1,6 +1,7 @@
 package com.app.Kezos.service.Impl;
 
 import java.text.SimpleDateFormat;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.app.Kezos.Dto.StudentDto;
 import com.app.Kezos.model.Assignments;
 import com.app.Kezos.model.CourseEntity;
 import com.app.Kezos.model.StudentEntity;
@@ -27,8 +29,11 @@ public class StudentServiceImpl implements IStudentService{
     @Autowired
     private ProxyCourseService proxyService;
     @Qualifier("answerValidator")
+    private IEvaluator aEvaluator;
+    @Qualifier("timeValidator")
     private IEvaluator tEvaluator;
-
+    
+    @Override
     public List<StudentEntity> fetchOneOrMany(String sId){
         List<StudentEntity> students=new ArrayList<>();
         if(sId==null){
@@ -39,20 +44,8 @@ public class StudentServiceImpl implements IStudentService{
         return students;
     }
 
-    @Override
-    public List<StudentEntity> fetchAllStudents() {
+    private List<StudentEntity> fetchAllStudents() {
         return studentRepository.findAll();
-    }
-
-    @Override
-    public List<CourseEntity> fetchMyCourses(String studentId) {
-        StudentEntity student = studentRepository.findByEnrollmentNumber(studentId);
-        if (student != null) {
-            return student.getCourses();
-        }
-        else{
-            return null;
-        }
     }
 
     @Override
@@ -60,6 +53,46 @@ public class StudentServiceImpl implements IStudentService{
         return studentRepository.findByEnrollmentNumber(studentId);
     }
 
+    public String registerStudent(StudentDto studentDto){
+        String responseString="";
+        String unuiqId=studentDto.getEnrollmentNumber().substring(4).toLowerCase();
+        if(!studentRepository.existsByEnrollmentNumber(unuiqId)){
+            StudentEntity student=new StudentEntity();
+            student.setFirstName(studentDto.getFirstName());
+            student.setLastName(studentDto.getLastName());
+            student.setEnrollmentNumber(unuiqId);
+            student.seteMail(studentDto.geteMail());
+            student.setScore(0);
+            student.setContactNumber(studentDto.getContactNumber());
+            student.setCourses(new ArrayList<>());
+            studentRepository.save(student);
+            responseString="student registered !";
+        }else{
+            responseString="Error!\nStudent already registered";
+        }
+        return responseString;
+    }
+
+    public String registerCourse(String courseId,String enrollmentId){
+        String resultString="";
+        StudentEntity student=studentRepository.findByEnrollmentNumber(enrollmentId);
+        CourseEntity course=proxyService.fetchCourse(courseId);
+        List<StudentEntity> registeredStudents=course.getStudents();
+        if(registeredStudents.contains(student)||student.getCourses().contains(course)){
+            resultString="Error\nalready Registered!";
+        }else{
+            registeredStudents.add(student);
+            proxyService.checkpoint(course);
+            student.getCourses().add(course);
+            studentRepository.save(student);
+        }
+        return resultString;
+    }
+    
+    // public String removeStudent(){
+        
+    // }
+    
     @Override
     public String submitAssignment(String studentId, int aId, String submission) {
         StudentEntity student = studentRepository.findByEnrollmentNumber(studentId);
@@ -74,7 +107,11 @@ public class StudentServiceImpl implements IStudentService{
         String result="";
         if(tEvaluator.validateAnswer(studentInfo, courseInfo)){
             result="Assignment submitted successfully";
-            student.setScore(10);
+            if(aEvaluator.validateAnswer(studentInfo, courseInfo)){
+                student.setScore(10);
+            }else{
+                student.setScore(6);
+            }
         }else{
             result="Error\nAssignment Expired";
             student.setScore(0);
@@ -90,9 +127,4 @@ public class StudentServiceImpl implements IStudentService{
         }
         return student.getScore()+"";
     }
-    public String registerCourse(String courseId){
-        CourseEntity course=proxyService.fetchCourse(courseId);
-        course.getStudents().add(null);
-    }
-    
 }
