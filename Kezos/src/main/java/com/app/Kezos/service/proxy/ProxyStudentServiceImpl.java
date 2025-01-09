@@ -26,15 +26,14 @@ public class ProxyStudentServiceImpl implements IStudentService{
                     students.put(studentElement.getEnrollmentNumber(),studentElement);
                 }
             }
+        }else{
+            if(students.containsKey(sId)){
+                studentList.add(students.get(sId));
+            }
         }
-        
+        return studentList;
     }
 
-    @Override
-    public StudentEntity fetchStudentDetails(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'fetchStudentDetails'");
-    }
 
     @Override
     public String submitAssignment(String studentId, int aId, String submission) {

@@ -48,8 +48,7 @@ public class StudentServiceImpl implements IStudentService{
         return studentRepository.findAll();
     }
 
-    @Override
-    public StudentEntity fetchStudentDetails(String studentId) {
+    private StudentEntity fetchStudentDetails(String studentId) {
         return studentRepository.findByEnrollmentNumber(studentId);
     }
 
