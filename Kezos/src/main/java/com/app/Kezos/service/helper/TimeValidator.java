@@ -1,7 +1,6 @@
 package com.app.Kezos.service.helper;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 
 import org.springframework.stereotype.Component;
 
@@ -9,9 +8,9 @@ import org.springframework.stereotype.Component;
 public class TimeValidator implements IEvaluator{
 
     @Override
-    public boolean validateAnswer(HashMap<String, String> studentInfo, HashMap<String, String> courseInfo) {
-        LocalDate currentDate = LocalDate.parse(studentInfo.get("date"));
-        LocalDate targetDate = LocalDate.parse(courseInfo.get("date"));
+    public boolean validateAnswer(String submittedDate, String deadLineDate) {
+        LocalDate currentDate = LocalDate.parse(submittedDate);
+        LocalDate targetDate = LocalDate.parse(deadLineDate);
         boolean valFlag=false;
         if(currentDate.isAfter(targetDate)){
             valFlag=false;

@@ -16,17 +16,21 @@ import org.springframework.web.bind.annotation.RestController;
 import com.app.Kezos.Dto.StudentDto;
 import com.app.Kezos.model.StudentEntity;
 import com.app.Kezos.service.Impl.StudentServiceImpl;
+import com.app.Kezos.service.proxy.ProxyStudentServiceImpl;
 
 @RestController
 public class StudentController {
     @Autowired
     private StudentServiceImpl studentService;
+    @Autowired
+    private ProxyStudentServiceImpl proxyStudentServiceImpl;
     private final String endpointV1 = "/v1/students";
+
 
     @GetMapping(endpointV1)
     public ResponseEntity<List<StudentEntity>> getStudentsInfo(
         @RequestParam(value = "sId", required = false) String sId) {
-        return new ResponseEntity<>(studentService.fetchOneOrMany(sId), HttpStatus.OK);
+        return new ResponseEntity<>(proxyStudentServiceImpl.fetchOneOrMany(sId), HttpStatus.OK);
     }
     @PostMapping(endpointV1)
     public ResponseEntity<String> createStudent(@RequestBody StudentDto studentDto){

@@ -93,20 +93,15 @@ public class StudentServiceImpl implements IStudentService{
     // }
     
     @Override
-    public String submitAssignment(String studentId, int aId, String submission) {
+    public String submitAssignment(String studentId, int aId, String solution) {
         StudentEntity student = studentRepository.findByEnrollmentNumber(studentId);
         Assignments assignment=assignmentService.fetchAssignments(aId);
-        HashMap<String,String> courseInfo=new HashMap<>();
-        HashMap<String,String> studentInfo=new HashMap<>();
         SimpleDateFormat ft= new SimpleDateFormat("dd-MM-yyyy"); 
         String current = ft.format(new Date()); 
-        studentInfo.put("date", current);
-        courseInfo.put("date", assignment.getDeadLine());
-        studentInfo.put("answer", submission);
         String result="";
-        if(tEvaluator.validateAnswer(studentInfo, courseInfo)){
+        if(timeValidator(current, assignment.getDeadLine())){
             result="Assignment submitted successfully";
-            if(aEvaluator.validateAnswer(studentInfo, courseInfo)){
+            if(answerValidator(assignment.getName(),solution)){
                 student.setScore(10);
             }else{
                 student.setScore(6);
@@ -115,6 +110,7 @@ public class StudentServiceImpl implements IStudentService{
             result="Error\nAssignment Expired";
             student.setScore(0);
         }
+        checkpoint(student);
         return result;
     }
 
@@ -125,5 +121,16 @@ public class StudentServiceImpl implements IStudentService{
             return "Error\nNo submissions found for the student.";
         }
         return student.getScore()+"";
+    }
+
+    public boolean timeValidator(String current,String courseInfo){
+        return tEvaluator.validateAnswer(current, courseInfo);
+    }
+    public boolean answerValidator(String name,String solution){
+        return aEvaluator.validateAnswer(name, solution);
+    }
+
+    public void checkpoint(StudentEntity student){
+        studentRepository.save(student);
     }
 }
