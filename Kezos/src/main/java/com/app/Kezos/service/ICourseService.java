@@ -8,7 +8,6 @@ import com.app.Kezos.model.CourseEntity;
 public interface ICourseService {
     boolean existingCourse(String id);
     List<CourseEntity> fetchAllCourses();
-    CourseEntity fetchCourse(String courseId);
     String createCourse(CourseDto courseDto);
     String removeCourse(String courseId);
     void checkpoint(CourseEntity course);

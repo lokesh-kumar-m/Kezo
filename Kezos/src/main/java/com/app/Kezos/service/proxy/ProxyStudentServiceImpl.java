@@ -87,7 +87,7 @@ public class ProxyStudentServiceImpl implements IStudentService{
         String unuiqId=studentDto.getEnrollmentNumber().substring(4).toLowerCase();
         if(!students.containsKey(unuiqId)){
             responseString=studentService.registerStudent(studentDto);
-            StudentEntity s=studentService.fetchOneOrMany(unuiqId).getFirst();
+            StudentEntity s=studentService.fetchOneOrMany(unuiqId).get(0);
             students.put(s.getEnrollmentNumber(), s);
         }else{
             responseString="Existing User";
@@ -95,21 +95,26 @@ public class ProxyStudentServiceImpl implements IStudentService{
         return responseString;
     }
 
-    public String registerCourse(String courseId,String enrollmentId){
+    public String registerCourse(String enrollmentId,String courseId){
         String resultString="";
-        if(students.containsKey(enrollmentId)){
-            StudentEntity student=students.get(enrollmentId);
-            CourseEntity course=courseProxy.fetchCourse(courseId);
-            if(course.getStudents().contains(student)){
-                resultString="Error\nalready Registered!";
-            }else{
+        if (!students.containsKey(enrollmentId)) {
+            resultString= "Error: Student not found in proxy cache!";
+        }else{
+            StudentEntity student = students.get(enrollmentId);
+        CourseEntity course = courseProxy.fetchOneOrAll(courseId).get(0);
+        if (course.getStudents().contains(student)) {
+            resultString= "Error: Student already registered for the course!";
+        }else{
+            resultString  = studentService.registerCourse(courseId, enrollmentId);
+            if (resultString.equals("registered to course")) {
                 course.getStudents().add(student);
-                courseProxy.checkpoint(course);
                 student.getCourses().add(course);
-                studentService.checkpoint(student);
+                checkpoint(student);
+                courseProxy.checkpoint(course);
             }
-
         }
+        }
+    
         return resultString;
     }
 

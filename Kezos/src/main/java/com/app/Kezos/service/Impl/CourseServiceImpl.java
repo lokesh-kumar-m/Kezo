@@ -30,7 +30,6 @@ public class CourseServiceImpl implements ICourseService {
         return courses;
     }
 
-    @Override
     public CourseEntity fetchCourse(String courseId){
         return courseRepository.findByCourseId(courseId);
     }

@@ -54,7 +54,7 @@ public class AssignmentServiceImpl  implements IAssignmentService{
     public String createAssignment(String courseId, List<AssignmentDto> assignmentsDtos) {
         String result="";
         if(proxyCourseService.existingCourse(courseId)){
-            CourseEntity courseEntity = proxyCourseService.fetchCourse(courseId);
+            CourseEntity courseEntity = proxyCourseService.fetchOneOrAll(courseId).get(0);
             List<Assignments> assignmentsList = assignmentsDtos.stream().map(assignmentDto -> {
                 Assignments assignment = new Assignments();
                 assignment.setName(assignmentDto.getTitle());

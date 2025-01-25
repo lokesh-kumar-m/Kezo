@@ -1,6 +1,7 @@
 package com.app.Kezos.service.helper;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import org.springframework.stereotype.Component;
 
@@ -8,9 +9,10 @@ import org.springframework.stereotype.Component;
 public class TimeValidator implements IEvaluator{
 
     @Override
-    public boolean validateAnswer(String submittedDate, String deadLineDate) {
-        LocalDate currentDate = LocalDate.parse(submittedDate);
-        LocalDate targetDate = LocalDate.parse(deadLineDate);
+    public boolean validate(String submittedDate, String deadLineDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate currentDate = LocalDate.parse(submittedDate,formatter);
+        LocalDate targetDate = LocalDate.parse(deadLineDate,formatter);
         boolean valFlag=false;
         if(currentDate.isAfter(targetDate)){
             valFlag=false;

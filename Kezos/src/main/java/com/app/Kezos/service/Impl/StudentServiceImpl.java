@@ -28,8 +28,12 @@ public class StudentServiceImpl implements IStudentService{
     private AssignmentServiceImpl assignmentService;
     @Autowired
     private ProxyCourseService proxyService;
+
+    @Autowired
     @Qualifier("answerValidator")
     private IEvaluator aEvaluator;
+
+    @Autowired
     @Qualifier("timeValidator")
     private IEvaluator tEvaluator;
     
@@ -88,15 +92,13 @@ public class StudentServiceImpl implements IStudentService{
         return resultString;
     }
     
-    // public String removeStudent(){
-        
-    // }
+   
     
     @Override
     public String submitAssignment(String studentId, int aId, String solution) {
         StudentEntity student = studentRepository.findByEnrollmentNumber(studentId);
         Assignments assignment=assignmentService.fetchAssignments(aId);
-        SimpleDateFormat ft= new SimpleDateFormat("dd-MM-yyyy"); 
+        SimpleDateFormat ft= new SimpleDateFormat("yyyy-MM-dd"); 
         String current = ft.format(new Date()); 
         String result="";
         if(timeValidator(current, assignment.getDeadLine())){
@@ -124,10 +126,10 @@ public class StudentServiceImpl implements IStudentService{
     }
 
     public boolean timeValidator(String current,String courseInfo){
-        return tEvaluator.validateAnswer(current, courseInfo);
+        return tEvaluator.validate(current, courseInfo);
     }
     public boolean answerValidator(String name,String solution){
-        return aEvaluator.validateAnswer(name, solution);
+        return aEvaluator.validate(name, solution);
     }
 
     public void checkpoint(StudentEntity student){

@@ -32,9 +32,7 @@ public class ProxyCourseService implements ICourseService{
         }
         return responseList;
     }
-    // public CourseEntity courseTest(String courseId){
-    //     return courseServiceImpl.fetchCourse(courseId);
-    // }
+    
     @Override
     public List<CourseEntity> fetchAllCourses() {
         if(allCourses.size()==0){
@@ -43,7 +41,6 @@ public class ProxyCourseService implements ICourseService{
         return allCourses;
     }
 
-    @Override
     public CourseEntity fetchCourse(String courseId) {
         return findCourse(courseId);
     }

@@ -32,12 +32,12 @@ public class StudentController {
     }
     @PostMapping(endpointV1)
     public ResponseEntity<String> createStudent(@RequestBody StudentDto studentDto){
-        return new ResponseEntity<>(studentService.registerStudent(studentDto),HttpStatus.OK);
+        return new ResponseEntity<>(proxyStudentServiceImpl.registerStudent(studentDto),HttpStatus.OK);
     }
 
     @PostMapping(endpointV1+"/register")
     public ResponseEntity<String> registerForCourse(@RequestParam(value = "sId",required = true)String enrollmentId,@RequestParam(value = "courseId",required = true)String courseId){
-        return new ResponseEntity<>(studentService.registerCourse(courseId, enrollmentId),HttpStatus.OK);
+        return new ResponseEntity<>(proxyStudentServiceImpl.registerCourse( enrollmentId,courseId),HttpStatus.OK);
     }
 
     @PostMapping(endpointV1+"/submission")
@@ -53,6 +53,5 @@ public class StudentController {
     public ResponseEntity<String> getScore(@RequestParam(value="sId")String enrollmentId){
         return new ResponseEntity<>(studentService.fetchStudentScore(enrollmentId),HttpStatus.OK);
     }
-
 
 }
