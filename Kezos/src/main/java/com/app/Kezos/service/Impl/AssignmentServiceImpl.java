@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.app.Kezos.Dto.AssignmentDto;
@@ -14,6 +17,7 @@ import com.app.Kezos.repository.AssignmentRepository;
 import com.app.Kezos.service.IAssignmentService;
 import com.app.Kezos.service.proxy.ProxyCourseService;
 
+
 @Service
 public class AssignmentServiceImpl  implements IAssignmentService{
     @Autowired
@@ -22,6 +26,7 @@ public class AssignmentServiceImpl  implements IAssignmentService{
     private ProxyCourseService proxyCourseService;
 
     @Override
+    @CacheEvict(value = "assignments", key = "#assignmentId")
     public String removeAssignment(int id) {
         String result="";
         if(assignmentRepository.existsById(id))
@@ -36,6 +41,7 @@ public class AssignmentServiceImpl  implements IAssignmentService{
     }
 
     @Override
+    @CachePut(value = "assignments", key = "#assignment.id")
     public String updateDeadLine(AssignmentDto assignmentDto, int id) {
         String result="";
         if(assignmentRepository.existsById(id)){
@@ -46,8 +52,9 @@ public class AssignmentServiceImpl  implements IAssignmentService{
         }
         return result;
     }
-    
+    @Cacheable(value = "assignments", key = "#aId")
     public Assignments fetchAssignments(int aId){
+        System.out.println("from DB");
         return assignmentRepository.findById(aId).get();
     }
 
@@ -74,7 +81,7 @@ public class AssignmentServiceImpl  implements IAssignmentService{
         }
         return result;
     }
-
+    
     public List<Assignments> fetchCourseAssignments(String courseId){
         List<Assignments> assignments=new ArrayList<>();
         if(courseId==null){
